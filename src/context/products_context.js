@@ -12,13 +12,20 @@ import {
   GET_SINGLE_PRODUCT_SUCCESS,
   GET_SINGLE_PRODUCT_ERROR,
 } from '../actions'
+import { type } from '@testing-library/user-event/dist/type'
 
 const initialState = {
   isSidebarOpen:false,
   products_loading:false,
   products_error:false,
-  producys:[],
-  featured_products:[]
+  products:[],
+  featured_products:[],
+  single_product_loading:false,
+  single_product_error:false,
+  single_product:{},
+  fetchingSingleProduct:{},
+  fetchProducts:{}
+
 }
 
 const ProductsContext = React.createContext()
@@ -39,8 +46,21 @@ export const ProductsProvider = ({ children }) => {
   
 
  }
+
+ const fetchingSingleProduct = async (url)=>{
+  dispatch({type:GET_SINGLE_PRODUCT_BEGIN});
+  try {
+    const response = await axios(url);
+    const singleProduct = response.data;
+    dispatch({type:GET_SINGLE_PRODUCT_SUCCESS,payload:singleProduct});
+
+    
+  } catch (error) {
+    dispatch({type:GET_SINGLE_PRODUCT_ERROR});
+  }
+ }
  useEffect(()=>{
-  fetchProducts(url);
+  fetchProducts(`${url}`);
  },[])
 
  const openSidebar =()=>{
@@ -52,7 +72,9 @@ export const ProductsProvider = ({ children }) => {
  
 
   return (
-    <ProductsContext.Provider value={{...state,openSidebar,closeSidebar}}>
+    <ProductsContext.Provider value={{...state,openSidebar,closeSidebar,
+      fetchingSingleProduct,fetchProducts
+    }}>
       {children}
     </ProductsContext.Provider>
   )
