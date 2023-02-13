@@ -8,8 +8,26 @@ import CartTotals from './CartTotals'
 import { FaShoppingCart } from 'react-icons/fa'
 
 const CartContent = () => {
+  const {cart,clearCart} = useCartContext();
   return (
-    <h4>cart content</h4>
+    <Wrapper className='section section-center'>
+      <CartColumns/>
+      {cart.map((item)=>{
+        return <CartItem key = {item.id} {...item} />
+      })}
+      <hr/>
+      <div className='link-container'>
+        <Link to='/products' className='link-btn'>
+          continue shopping
+        </Link>
+        <button type='button' 
+        className='link-btn clear-btn'
+        onClick={clearCart}>
+            clear shopping cart
+        </button>
+      </div>
+      <CartTotals/>
+    </Wrapper>
   )
 }
 const Wrapper = styled.section`
