@@ -9,15 +9,16 @@ import {
     Cart,
     Checkout,
     Error,
-    Private,
     Products,
     Product
 } from './pages'
+import PrivateRoute from './pages/PrivateRoute'
 
 
 
 function App() {
   return (
+    <AuthWrapper>
     <Router>
       <Navbar/>
       <Sidebar/>
@@ -37,16 +38,17 @@ function App() {
         <Route exact path='/products/:id' children ={<Product/>}>
           
         </Route>
-        <Route exact path='/checkout'>
-          <Checkout/>
-        </Route>
-        
+        <PrivateRoute exact path='/checkout'>
+        <Checkout/>
+        </PrivateRoute>
+       
         <Route exact path='*'>
          <Error/>
         </Route>
       </Switch>
      <Footer/>
     </Router>
+    </AuthWrapper>
   )
 }
 
